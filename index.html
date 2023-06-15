@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JavaScript Source Filter</title>
+          <style type="text/css">
+                 /* General styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  padding-top: 30px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #3368ff;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  display: none;
+  padding-top: 80px;
+}
+
+.popup-content {
+  background-color: white;
+  margin: auto;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) { /* Apply styles for screens larger than 768px */
+  input[type="text"] {
+    width: 70%;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+
+  label {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+
+  button {
+    margin-bottom: 0;
+  }
+} 
+    </style>
+</head>
+<body>
+      <div style="text-align: center;">
+  <textarea id="url-input" rows="1" cols="50" placeholder="https://streamhide.to/e/..."></textarea><br>
+    <button onclick="generateSource()">Generate Source</button>
+    <br><br>
+    <textarea id="viewSourceUrl" rows="1" cols="50" placeholder="view-source:https://streamhide.to/e/..."></textarea><br>
+    <button onclick="copyviewSourceUrl()">Copy</button>
+
+	<h1>Arteenz/streamhide.to/server7/.../{Filter server}</h1>
+
+	<label for="input">Input:</label><br>
+	<textarea id="input" rows="3" cols="150" placeholder="<!DOCTYPE html>"></textarea><br>
+
+	<button onclick="filterSources()">Filter Sources</button><br><br>
+
+	<label for="output">Output:</label><br>
+	<textarea id="output" rows="4" cols="150" placeholder="[{file:'https://cdn046.sh-content.com/...'}]"></textarea><br>
+  <button onclick="output()">Copy</button><br><br>
+
+  <textarea id="inputt" rows="4" cols="150" placeholder="[{file:'https://cdn046.sh-content.com/...'}]"></textarea><br>
+  <button onclick="extractUrl()">Extract URL</button>
+  <p>Result:</p>
+  <textarea id="outputt" rows="4" cols="150" placeholder="https://cdn046.sh-content.com/.../." readonly></textarea><br>
+  <button onclick="outputt()">Copy</button> <button onclick="reset()">Reset</button><br><br>
+  </div>
+  <script>
+      function generateSource() {
+        const urlInput = document.getElementById('url-input');
+        
+        
+        const url = urlInput.value;
+        const viewSourceUrl = `view-source:${url}`;
+        
+        
+         // Update the second textarea with the generated URL
+        document.getElementById("viewSourceUrl").value = viewSourceUrl;
+
+      }
+    </script>
+
+	<script>
+		function filterSources() {
+			// Get the input text
+			var input = document.getElementById("input").value;
+
+			// Use a regular expression to find the value of the "sources" property
+			var regex = /sources:\s*(\[[^\]]+\])/;
+			var match = input.match(regex);
+
+			// If a match is found, extract the value and update the output textarea
+			if (match !== null) {
+				var sources = match[1];
+				document.getElementById("output").value = sources;
+			} else {
+				document.getElementById("output").value = "No sources found.";
+			}
+		}
+	</script>
+
+  <script>
+    function extractUrl() {
+      const inputt = document.getElementById('inputt').value;
+      const urlRegex = /\[{file:"(.*?)"\}]/g;
+      const match = urlRegex.exec(inputt);
+      if (match) {
+        document.getElementById('outputt').value = match[1];
+      } else {
+        document.getElementById('outputt').value = "No URL found in input";
+      }
+    }
+  </script>
+   <script>
+      function copyviewSourceUrl() {
+        // Copy the modified output from the viewSourceUrl textarea to the clipboard
+        var modifiedTextarea = document.getElementById("viewSourceUrl");
+        modifiedTextarea.select();
+        document.execCommand("copy");
+      }
+
+      function output() {
+        // Copy the modified output from the output textarea to the clipboard
+        var modifiedTextarea = document.getElementById("output");
+        modifiedTextarea.select();
+        document.execCommand("copy");
+      }
+
+      function outputt() {
+        // Copy the modified output from the output textarea to the clipboard
+        var modifiedTextarea = document.getElementById("outputt");
+        modifiedTextarea.select();
+        document.execCommand("copy");
+      }
+   </script>
+
+   <script>
+      function reset() {
+      document.getElementById("url-input").value = "";
+      document.getElementById("viewSourceUrl").value = "";
+      document.getElementById("input").value = "";
+      document.getElementById("output").value = "";
+      document.getElementById("inputt").value = "";
+      document.getElementById("outputt").value = "";
+    }
+   </script>
+</body>
+</html>
